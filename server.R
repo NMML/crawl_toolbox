@@ -5,33 +5,37 @@
 # http://www.rstudio.com/shiny/
 #
 
-require(shiny); require(rCharts); require(crawl)
+suppressMessages(require(shiny))
+suppressMessages(require(rCharts))
+suppressMessages(require(crawl))
 
 shinyServer(function(input, output) {
  
   output$ocean_map <- renderMap({
-    if(input$example == "northernFurSeal"){
-      runNFS()
-    } else if (input$example == "harborSeal") {
-      runHS()
-    }
     ocean_map <- Leaflet$new()
     ocean_map$tileLayer('http://services.arcgisonline.com/ArcGIS/rest/services/Ocean/World_Ocean_Base/MapServer/tile/{z}/{y}/{x}')
     ocean_map$params$layerOpts$attribution = 'ESRI World Ocean Base'
     ocean_map$set(height = 500, width = "100%")
     ocean_map$setView(c(55, -165), 3)
-    ocean_map$geoJson(json_ud)
-#     ocean_map$geoJson(json_line)
-#     ocean_map$geoJson(json_points,
-#       pointToLayer =  "#! function(feature, latlng){
-#         return L.circleMarker(latlng, {
-#           radius: 2,
-#           fillColor: feature.properties.fillColor || 'black',    
-#           color: '#000',
-#           weight: 0,
-#           fillOpacity: 0.5
-#         })
-#     } !#")
+    if(input$example == "Northern Fur Seal"){
+      createSpatialFiles(nfs_predObj, "nfs")
+    } else if (input$example == "Harbor Seal") {
+      createSpatialFiles(hs_predObj, "hs")
+    }
+    if(input$example %in% c("Northern Fur Seal", "Harbor Seal")){
+#      ocean_map$geoJson(json_ud)
+     ocean_map$geoJson(list(json_line, json_points, json_ud),
+                            pointToLayer =  "#! function(feature, latlng){
+                                             return L.circleMarker(latlng, {
+                                             radius: 2,
+                                             fillColor: feature.properties.fillColor || 'black',    
+                                             color: '#000',
+                                             weight: 0,
+                                             fillOpacity: 0.5
+                                             })
+                                             } !#"
+                       )
+    }
     return(ocean_map)
   })
   
