@@ -25,6 +25,15 @@ shinyUI(fluidPage(theme = "cerulean/bootstrap.css",
                 areas of use."),
         column(7,offset=1,
                h3("Marine Animal Telemetry Prediction Toolbox"),
-               "crawl, walk, run and explore"))
+               fluidRow(
+                  column(6,
+                        selectInput("example", "Choose an Example:", 
+                        choices = c("northernFurSeal", "harborSeal"))
+                        ),
+                  column(4,
+                         helpText("select from two example datasets included in crawl."))
+                  )
+        )
+      )
   )
 )
