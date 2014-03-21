@@ -32,7 +32,6 @@ shinyServer(function(input, output) {
 #           fillOpacity: 0.5
 #         })
 #     } !#")
-
     return(ocean_map)
   })
   
