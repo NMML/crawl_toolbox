@@ -1,46 +1,32 @@
-library(leaflet)
-library(ShinyDash)
+
+# This is the user-interface definition of a Shiny web application.
+# You can find out more about building applications with Shiny here:
+# 
+# http://www.rstudio.com/shiny/
+#
+
+require(shiny); require(rCharts)
 
 shinyUI(fluidPage(
-  tags$head(tags$link(rel='stylesheet', type='text/css', href='styles.css')),
-  leafletMap(
-    "map", "100%", 400,
-    initialTileLayer = "//{s}.tiles.mapbox.com/v3/mapbox.natural-earth-2/{z}/{x}/{y}.png",
-    initialTileLayerAttribution = HTML('Maps by <a href="http://www.mapbox.com/">Mapbox</a>'),
-    options=list(
-      wrapDateLine = 'true',
-      center = c(37.45, -93.85),
-      zoom = 3
-    )
-  ),
-  fluidRow(
-    column(8, offset=3,
-           h2('Protected Resources Space Use'),
-           htmlWidgetOutput(
-             outputId = 'desc',
-             HTML(paste(
-               'The map is centered at <span id="lat"></span>, <span id="lng"></span>',
-               'with a zoom level of <span id="zoom"></span>.<br/>',
-               'Kernel density space use from <span id="num_tags"></span> deployed on <span id="species"></span>.'
-             ))
-           )
-    )
-  ),
-  hr(),
-  fluidRow(
-    column(3,
-           selectInput('year', 'Year', c(2000:2010), 2010),
-           selectInput('maxCities', 'Maximum cities to display', choices=c(
-             5, 25, 50, 100, 200, 500, 2000, 5000, 10000, All = 100000
-           ), selected = 100)
-    ),
-    column(4,
-           h4('Visible cities'),
-           tableOutput('data')
-    ),
-    column(5,
-           h4(id='cityTimeSeriesLabel', class='shiny-text-output'),
-           plotOutput('cityTimeSeries', width='100%', height='250px')
+      
+      title = "Crawl Telemetry Prediction Toolbox",
+
+      showOutput('ocean_map', 'leaflet'),
+      
+      fluidRow(
+        column(4,
+               imageOutput("banner_image")),
+        column(7,offset=1,
+               h3("Marine Animal Telemetry Prediction Toolbox"),
+               "crawl, walk, run and explore")),
+      
+      fluidRow(
+        column(4,
+               paste("Welcome to the NOAA Fisheries Marine Animal Telemetry Prediction Toolbox.",
+                     "This toolbox depends upon the R-package crawl developed by Devin Johnson",
+                     "at the Alaska Fisheries Science Center's National Marine Mammal Laboratory",
+                     "After successfully modeling your animal movement dataset with crawl,",
+                     "this toolbox will help you explore the movement and identify important",
+                     "areas of use.")))
     )
   )
-))
