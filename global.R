@@ -1,4 +1,4 @@
-require('crawl'); require('rgdal'); require('RJSONIO')
+require('crawl'); require('rgdal'); require('RJSONIO'); require("adehabitatHR")
 
 runNFS <- function() {
   #load example data from crawl
@@ -47,6 +47,16 @@ runNFS <- function() {
   proj4string(nfs_obsPoints) <- CRS("+proj=longlat +datum=WGS84 +lon_wrap=180")
   nfs_obsPoints <- spTransform(nfs_obsPoints,CRS("+proj=longlat +datum=WGS84 +lon_wrap=0"))
   
+  nfs_predObj_sp = nfs_predObj
+  coordinates(nfs_predObj_sp) = ~mu.x + mu.y
+  proj4string(nfs_predObj_sp) <- CRS("+proj=longlat +datum=WGS84 +lon_wrap=180")
+  nfs_ud = kernelUD(as(nfs_predObj_sp, "SpatialPoints"), grid=256)
+  nfs_ud <- rbind(
+    spTransform(getverticeshr(nfs_ud, 75, ida="hr75"), CRS("+proj=longlat +datum=WGS84 +lon_wrap=0")),
+    spTransform(getverticeshr(nfs_ud, 50, ida="hr50"), CRS("+proj=longlat +datum=WGS84 +lon_wrap=0")),
+    spTransform(getverticeshr(nfs_ud, 10, ida="hr10"), CRS("+proj=longlat +datum=WGS84 +lon_wrap=0"))
+  )
+  
   if(file.exists('nfs_line.geojson')){
     file.remove('nfs_line.geojson')
   }
@@ -55,11 +65,19 @@ runNFS <- function() {
     file.remove('nfs_points.geojson')
   }
   
+  if(file.exists('nfs_ud.geojson')){
+    file.remove('nfs_ud.geojson')
+  }
+  
+  
   writeOGR(nfs_line, 'nfs_line.geojson','nfs', driver='GeoJSON',check_exists=TRUE,overwrite_layer=TRUE)
   writeOGR(nfs_obsPoints, 'nfs_points.geojson','nfs', driver='GeoJSON',check_exists=TRUE,overwrite_layer=TRUE)
+  writeOGR(nfs_ud, 'nfs_ud.geojson','nfs', driver='GeoJSON',check_exists=TRUE,overwrite_layer=TRUE)
   
   json_line <<- RJSONIO::fromJSON('nfs_line.geojson')
   json_points <<- RJSONIO::fromJSON('nfs_points.geojson')
+  json_ud <<- RJSONIO::fromJSON('nfs_ud.geojson')
+  
 }
 
 runHS <- function() {

@@ -20,17 +20,19 @@ shinyServer(function(input, output) {
     ocean_map$params$layerOpts$attribution = 'ESRI World Ocean Base'
     ocean_map$set(height = 500, width = "100%")
     ocean_map$setView(c(55, -165), 3)
-    ocean_map$geoJson(json_line)
-    ocean_map$geoJson(json_points,
-      pointToLayer =  "#! function(feature, latlng){
-        return L.circleMarker(latlng, {
-          radius: 2,
-          fillColor: feature.properties.fillColor || 'black',    
-          color: '#000',
-          weight: 0,
-          fillOpacity: 0.5
-        })
-    } !#")
+    ocean_map$geoJson(json_ud)
+#     ocean_map$geoJson(json_line)
+#     ocean_map$geoJson(json_points,
+#       pointToLayer =  "#! function(feature, latlng){
+#         return L.circleMarker(latlng, {
+#           radius: 2,
+#           fillColor: feature.properties.fillColor || 'black',    
+#           color: '#000',
+#           weight: 0,
+#           fillOpacity: 0.5
+#         })
+#     } !#")
+
     return(ocean_map)
   })
   
