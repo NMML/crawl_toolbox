@@ -1,39 +1,8 @@
 require('crawl'); require('rgdal'); require('RJSONIO'); require("adehabitatHR")
 
+load('predObj.Rdata')
+
 runNFS <- function() {
-  #load example data from crawl
-  data(northernFurSeal)
-  
-  argosClasses <- c("3", "2", "1", "0", "A", "B")
-  ArgosMultFactors <- data.frame(Argos_loc_class=argosClasses,
-                                 errX=log(c(1, 1.5, 4, 14, 5.21, 20.78)),
-                                 errY=log(c(1, 1.5, 4, 14, 11.08, 31.03)))
-  nfsNew <- merge(northernFurSeal, ArgosMultFactors,
-                  by=c("Argos_loc_class"), all.x=TRUE)
-  nfsNew <- nfsNew[order(nfsNew$Time), ]
-  
-  # State starting values
-  initial.drift <- list(a1.x=c(189.686, 0, 0), a1.y=c(57.145, 0, 0),
-                        P1.x=diag(c(0, 0.001, 0.001)),
-                        P1.y=diag(c(0, 0.001, 0.001)))
-  
-  ##Fit random drift model
-  # Check out the parameters 
-  displayPar(mov.model=~1, err.model=list(x=~errX, y=~errY), drift.model=TRUE,
-             data=nfsNew, fixPar=c(NA, 1, NA, 1, NA, NA, NA, NA))
-  
-  fit <- crwMLE(mov.model=~1, err.model=list(x=~errX, y=~errY), drift.model=TRUE,
-                data=nfsNew, coord=c("longitude", "latitude"), polar.coord=TRUE,
-                Time.name="Time", initial.state=initial.drift, 
-                fixPar=c(NA, 1, NA, 1, NA, NA, NA, NA), 
-                control=list(maxit=2000),
-                initialSANN=list(maxit=300)
-  )
-  
-  ##Make hourly location predictions
-  nfs_predTime <- seq(ceiling(min(nfsNew$Time)), floor(max(nfsNew$Time)), 1)
-  nfs_predObj <- crwPredict(object.crwFit=fit, nfs_predTime, speedEst=TRUE, flat=TRUE)
-  
   nfs_line <- Line(cbind(nfs_predObj$mu.x,nfs_predObj$mu.y))
   nfs_line <- Lines(list(nfs_line),ID="nfs")
   nfs_line <- SpatialLines(list(nfs_line))
@@ -81,34 +50,6 @@ runNFS <- function() {
 }
 
 runHS <- function() {
-  data(harborSeal)
-
-  argosClasses <- c("3", "2", "1", "0", "A", "B")
-  ArgosMultFactors <- data.frame(Argos_loc_class=argosClasses, 
-                                 errX=log(c(1, 1.5, 4, 14, 5.21, 20.78)), 
-                                 errY=log(c(1, 1.5, 4, 14, 11.08, 31.03)))
-  hsNew <- merge(harborSeal, ArgosMultFactors, by=c("Argos_loc_class"), all=TRUE)
-  hsNew <- hsNew[order(hsNew$Time), ]
-  head(hsNew)
-
-  initial.dry <- list(
-    a1.x=c(harborSeal$longitude[1],0),
-    a1.y=c(harborSeal$latitude[1],0),
-    P1.x=diag(c(1,1)),
-    P1.y=diag(c(1,1))
-  )
-  
-  fit <- crwMLE(
-    mov.model=~1, err.model=list(x=~errX, y=~errY), stop.model=~DryTime,
-    data=hsNew, coord=c("longitude","latitude"), polar.coord=TRUE, Time.name="Time", 
-    initial.state=initial.dry, fixPar=c(NA, 1, NA, 1, NA, NA, NA), theta=c(-6,-7,-4,-0.5,-1),
-    control=list(maxit=2000),
-  )
-  
-  ##Make hourly location predictions
-  hs_predTime <- seq(ceiling(min(hsNew$Time)), floor(max(hsNew$Time)), 1)
-  hs_predObj <- crwPredict(object.crwFit=fit, hs_predTime, flat=TRUE)
-  
   hs_line <- Line(cbind(hs_predObj$mu.x,hs_predObj$mu.y))
   hs_line <- Lines(list(hs_line),ID="hs")
   hs_line <- SpatialLines(list(hs_line))
