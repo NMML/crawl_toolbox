@@ -7,7 +7,7 @@
 
 require(shiny); require(rCharts)
 
-shinyUI(fluidPage(
+shinyUI(fluidPage(theme = "cerulean/bootstrap.css",
       
       title = "Crawl Telemetry Prediction Toolbox",
 
@@ -15,18 +15,16 @@ shinyUI(fluidPage(
       
       fluidRow(
         column(4,
-               imageOutput("banner_image")),
+               br(),
+               "Welcome to the NOAA Fisheries Marine Animal Telemetry Prediction Toolbox.
+                This toolbox depends upon the R-package crawl developed by Devin Johnson
+                at the Alaska Fisheries Science Center's National Marine Mammal Laboratory",
+               br(),br(),
+                "After successfully modeling your animal movement dataset with crawl,
+                this toolbox will help you explore the movement and identify important
+                areas of use."),
         column(7,offset=1,
                h3("Marine Animal Telemetry Prediction Toolbox"),
-               "crawl, walk, run and explore")),
-      
-      fluidRow(
-        column(4,
-               paste("Welcome to the NOAA Fisheries Marine Animal Telemetry Prediction Toolbox.",
-                     "This toolbox depends upon the R-package crawl developed by Devin Johnson",
-                     "at the Alaska Fisheries Science Center's National Marine Mammal Laboratory",
-                     "After successfully modeling your animal movement dataset with crawl,",
-                     "this toolbox will help you explore the movement and identify important",
-                     "areas of use.")))
-    )
+               "crawl, walk, run and explore"))
   )
+)
