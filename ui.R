@@ -5,7 +5,8 @@
 # http://www.rstudio.com/shiny/
 #
 
-require(shiny); require(rCharts)
+suppressMessages(require(shiny))
+suppressMessages(require(rCharts))
 
 shinyUI(fluidPage(theme = "cerulean/bootstrap.css",
       
@@ -28,7 +29,7 @@ shinyUI(fluidPage(theme = "cerulean/bootstrap.css",
                fluidRow(
                   column(6,
                         selectInput("example", "Choose an Example:", 
-                        choices = c("northernFurSeal", "harborSeal"))
+                        choices = c("", "Northern Fur Seal", "Harbor Seal"))
                         ),
                   column(4,
                          helpText("select from two example datasets included in crawl."))
