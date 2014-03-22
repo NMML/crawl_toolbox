@@ -24,8 +24,17 @@ shinyServer(function(input, output) {
     }
     if(input$example %in% c("Northern Fur Seal", "Harbor Seal")){
 #      ocean_map$geoJson(json_ud)
-     ocean_map$geoJson(list(json_line, json_points, json_ud),
-                            pointToLayer =  "#! function(feature, latlng){
+     ocean_map$geoJson(list(json_ud, json_line, json_points),
+                       style = "#! function(feature) {
+                                if ( feature.geometry.type === 'MultiPolygon' ) {
+                                return{color: 'red', fillOpacity: 0.3, weight: 0};
+                                }
+                                if ( feature.geometry.type === 'LineString' ) {
+                                return{color: 'grey'};
+                                }
+                       }
+                                !#",
+                        pointToLayer =  "#! function(feature, latlng){
                                              return L.circleMarker(latlng, {
                                              radius: 2,
                                              fillColor: feature.properties.fillColor || 'black',    
