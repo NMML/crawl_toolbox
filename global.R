@@ -46,7 +46,9 @@ createSpatialFiles = function(x, outputID){
   }
   
   # sample the observed points to improve performance
-  x_obsPoints <- x_obsPoints[sample(x=nrow(x_obsPoints), size=250),]
+  if(nrow(x_obsPoints) >= 250){
+      x_obsPoints <- x_obsPoints[sample(x=nrow(x_obsPoints), size=250),]
+  }
   
   writeOGR(x_line, lnFile, outputID, driver='GeoJSON')
   writeOGR(x_obsPoints, ptsFile, outputID, driver='GeoJSON')
