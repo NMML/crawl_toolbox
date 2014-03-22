@@ -17,14 +17,32 @@ shinyServer(function(input, output) {
     ocean_map$params$layerOpts$attribution = 'ESRI World Ocean Base'
     ocean_map$set(height = 500, width = "100%")
     ocean_map$setView(c(55, -165), 3)
+    
     if(input$example == "Northern Fur Seal"){
       createSpatialFiles(nfs_predObj, "nfs")
     } else if (input$example == "Harbor Seal") {
       createSpatialFiles(hs_predObj, "hs")
     }
+    
     if(input$example %in% c("Northern Fur Seal", "Harbor Seal")){
-#      ocean_map$geoJson(json_ud)
-     ocean_map$geoJson(list(json_ud, json_line, json_points),
+      # determine which layers are checked
+     if(input$kernel & !input$lines & !input$points) {
+       json_layers <- list(json_ud)
+     } else if(!input$kernel & input$lines & !input$points) {
+       json_layers <- list(json_line)
+     } else if(!input$kernel & !input$lines & input$points) {
+       json_layers <- list(json_points)
+     } else if(input$kernel & input$lines & !input$points) {
+       json_layers <- list(json_ud,json_line)
+     } else if(input$kernel & !input$lines & input$points) {
+       json_layers <- list(json_ud,json_points)
+     } else if(!input$kernel & input$lines & input$points) {
+       json_layers <- list(json_line,json_points)
+     } else if(input$kernel & input$lines & input$points) {
+       json_layers <- list(json_ud,json_line,json_points)
+     } else json_layers <- list(" ")
+     
+     ocean_map$geoJson(json_layers,
                        style = "#! function(feature) {
                                 if ( feature.geometry.type === 'MultiPolygon' ) {
                                 return{color: 'red', fillOpacity: 0.3, weight: 0};

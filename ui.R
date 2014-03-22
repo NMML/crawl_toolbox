@@ -30,10 +30,14 @@ shinyUI(fluidPage(theme = "cerulean/bootstrap.css",
                   column(6,
                         selectInput("example", "Choose an Example:", 
                         choices = c("", "Northern Fur Seal", "Harbor Seal"))
-                        ),
-                  column(4,
-                         helpText("select from two example datasets included in crawl."))
-                  )
+                        )
+                  ),
+               fluidRow(
+                 column(12,
+                        checkboxInput("lines", "Show tracklines", FALSE),
+                        checkboxInput("kernel","Show kernel range",TRUE),
+                        checkboxInput("points","Show observed points",FALSE))
+                 )
         )
       )
   )
