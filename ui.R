@@ -33,12 +33,19 @@ shinyUI(fluidPage(theme = "cerulean/bootstrap.css",
                         )
                   ),
                fluidRow(
-                 column(12,
+                 column(6,
                         checkboxInput("lines", "Show tracklines", FALSE),
                         checkboxInput("kernel","Show kernel range",TRUE),
                         checkboxInput("points","Show observed points",FALSE))
                  )
         )
-      )
+      ),
+      fluidRow(
+        br(),
+        column(6,offset=5,
+                      conditionalPanel(
+                        condition = "input.points == true",
+                        "* points will be sampled to 250 or less for display only"
+                      )))
   )
 )
