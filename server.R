@@ -44,19 +44,28 @@ shinyServer(function(input, output) {
      
      ocean_map$geoJson(json_layers,
                        style = "#! function(feature) {
+                                var hr2col = {'hr90':'#f7fcfd',
+                                              'hr80':'#e0ecf4',
+                                              'hr70':'#bfd3e6',
+                                              'hr60':'#9ebcda',
+                                              'hr50':'#8c96c6',
+                                              'hr40':'#8c6bb1',
+                                              'hr30':'#88419d',
+                                              'hr20':'#810f7c',
+                                              'hr10':'#4d004b'};
                                 if ( feature.geometry.type === 'MultiPolygon' ) {
-                                return{color: 'red', fillOpacity: 0.3, weight: 0};
+                                return{color: hr2col[feature.properties['id']], 
+                                        fillOpacity: 0.3, weight: 0};
                                 }
                                 if ( feature.geometry.type === 'LineString' ) {
-                                return{color: 'grey'};
+                                return{color: '#ff7f00', weight: 2};
                                 }
                        }
                                 !#",
                         pointToLayer =  "#! function(feature, latlng){
                                              return L.circleMarker(latlng, {
-                                             radius: 2,
-                                             fillColor: feature.properties.fillColor || 'black',    
-                                             color: '#000',
+                                             radius: 2,    
+                                             color: '#4daf4a',
                                              weight: 0,
                                              fillOpacity: 0.5
                                              })
