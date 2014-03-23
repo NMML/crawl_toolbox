@@ -23,9 +23,16 @@ createSpatialFiles = function(x, outputID){
   coordinates(x) = ~mu.x + mu.y
   proj4string(x) <- CRS("+proj=longlat +datum=WGS84 +lon_wrap=180")
   x_ud = kernelUD(as(x, "SpatialPoints"), grid=256)
+  
   x_ud_rings <- rbind(
-    spTransform(getverticeshr(x_ud, 75, ida="hr75"), CRS("+proj=longlat +datum=WGS84 +lon_wrap=0")),
+    spTransform(getverticeshr(x_ud, 90, ida="hr90"), CRS("+proj=longlat +datum=WGS84 +lon_wrap=0")),
+    spTransform(getverticeshr(x_ud, 80, ida="hr80"), CRS("+proj=longlat +datum=WGS84 +lon_wrap=0")),
+    spTransform(getverticeshr(x_ud, 70, ida="hr70"), CRS("+proj=longlat +datum=WGS84 +lon_wrap=0")),
+    spTransform(getverticeshr(x_ud, 60, ida="hr60"), CRS("+proj=longlat +datum=WGS84 +lon_wrap=0")),
     spTransform(getverticeshr(x_ud, 50, ida="hr50"), CRS("+proj=longlat +datum=WGS84 +lon_wrap=0")),
+    spTransform(getverticeshr(x_ud, 40, ida="hr40"), CRS("+proj=longlat +datum=WGS84 +lon_wrap=0")),
+    spTransform(getverticeshr(x_ud, 30, ida="hr30"), CRS("+proj=longlat +datum=WGS84 +lon_wrap=0")),
+    spTransform(getverticeshr(x_ud, 20, ida="hr20"), CRS("+proj=longlat +datum=WGS84 +lon_wrap=0")),
     spTransform(getverticeshr(x_ud, 10, ida="hr10"), CRS("+proj=longlat +datum=WGS84 +lon_wrap=0"))
   )
   
