@@ -1,10 +1,3 @@
-
-# This is the user-interface definition of a Shiny web application.
-# You can find out more about building applications with Shiny here:
-# 
-# http://www.rstudio.com/shiny/
-#
-
 suppressMessages(require(shiny))
 suppressMessages(require(rCharts))
 
@@ -23,7 +16,8 @@ shinyUI(fluidPage(theme = "cerulean/bootstrap.css",
                br(),br(),
                 "After successfully modeling your animal movement dataset with crawl,
                 this toolbox will help you explore the movement and identify important
-                areas of use."),
+                areas of use ... eventually. For now, this represents a proof of concept
+                and relies on the two example datasets that ship with crawl."),
         column(7,offset=1,
                h3("Marine Animal Telemetry Prediction Toolbox"),
                fluidRow(

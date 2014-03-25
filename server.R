@@ -14,9 +14,9 @@ shinyServer(function(input, output) {
   output$ocean_map <- renderMap({
     ocean_map <- Leaflet$new()
     ocean_map$tileLayer('https://services.arcgisonline.com/ArcGIS/rest/services/Ocean/World_Ocean_Base/MapServer/tile/{z}/{y}/{x}')
-    ocean_map$params$layerOpts$attribution = 'ESRI World Ocean Base'
+    ocean_map$params$layerOpts$attribution = 'ESRI World Ocean Base (Sources: Esri, GEBCO, NOAA, National Geographic, DeLorme, HERE, Geonames.org, and other contributors)'
     ocean_map$set(height = 500, width = "100%")
-    ocean_map$setView(c(55, -165), 3)
+    ocean_map$setView(c(55, -165), 3) #TODO: set extent dynamically based on data
     
     if(input$example == "Northern Fur Seal"){
       createSpatialFiles(nfs_predObj, "nfs")
@@ -76,10 +76,8 @@ shinyServer(function(input, output) {
   })
   
   output$banner_image <- renderImage({
-    # When input$n is 3, filename is ./images/image3.jpeg
     filename <- normalizePath(file.path('banner.png'))
     
-    # Return a list containing the filename and alt text
     list(src = filename,
          alt = paste("NOAA Fisheries Banner"))
     
