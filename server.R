@@ -13,7 +13,7 @@ shinyServer(function(input, output) {
  
   output$ocean_map <- renderMap({
     ocean_map <- Leaflet$new()
-    ocean_map$tileLayer('http://services.arcgisonline.com/ArcGIS/rest/services/Ocean/World_Ocean_Base/MapServer/tile/{z}/{y}/{x}')
+    ocean_map$tileLayer('https://services.arcgisonline.com/ArcGIS/rest/services/Ocean/World_Ocean_Base/MapServer/tile/{z}/{y}/{x}')
     ocean_map$params$layerOpts$attribution = 'ESRI World Ocean Base'
     ocean_map$set(height = 500, width = "100%")
     ocean_map$setView(c(55, -165), 3)
