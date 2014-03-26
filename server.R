@@ -5,9 +5,9 @@
 # http://www.rstudio.com/shiny/
 #
 
-suppressMessages(require(shiny))
-suppressMessages(require(rCharts))
-suppressMessages(require(crawl))
+require(shiny)
+require(rCharts)
+require(crawl)
 
 shinyServer(function(input, output) {
  
@@ -20,8 +20,10 @@ shinyServer(function(input, output) {
     
     if(input$example == "Northern Fur Seal"){
       createSpatialFiles(nfs_predObj, "nfs")
+      cat("creating/updating spatial files for nfs\n",file=stderr())
     } else if (input$example == "Harbor Seal") {
       createSpatialFiles(hs_predObj, "hs")
+      cat("creating/updating spatial files for hs\n",file=stderr())
     }
     
     if(input$example %in% c("Northern Fur Seal", "Harbor Seal")){
@@ -72,6 +74,7 @@ shinyServer(function(input, output) {
                                              } !#"
                        )
     }
+    cat("updating map with data\n",file=stderr())
     return(ocean_map)
   })
   

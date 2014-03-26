@@ -4,6 +4,7 @@ suppressMessages(require('RJSONIO', quietly=TRUE))
 suppressMessages(require("adehabitatHR", quietly=TRUE))
 
 load('predObj.Rdata')
+cat("loading predObj.Rdata file\n",file=stderr())
 
 createSpatialFiles = function(x, outputID){
   if(!inherits(x, "crwPredict")) stop("You must specify a 'crwPredict' object to use 'createSpatialFiles()'!")
